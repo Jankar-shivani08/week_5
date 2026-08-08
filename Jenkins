@@ -1,0 +1,49 @@
+pipeline{
+    agent any
+    stages{
+        stage("Checkout"){
+            steps{
+                echo 'cloning repo'
+                git branch: 'main', url: 'https://github.com/Jankar-shivani08/week_5.git'
+            }
+        }
+        stage('Compile'){
+            steps{
+                echo 'compilation'
+                bat 'javac fact.java testfact.java'
+            }
+        }
+        stage("Test"){
+            steps{
+                echo 'testing'
+                bat 'java testfact'
+            }
+        }
+        stage('Run'){
+            steps{
+                echo 'run'
+                bat 'java fact'
+            }
+        }
+        stage('Package JAR'){
+            steps{
+                echo 'Build'
+                bat 'jar cfm fact.jar manifest.txt fact.class'
+            }
+        }
+        stage('Archive JAR'){
+            steps{
+                echo 'Deploy'
+                archiveArtifacts artifacts: 'fact.jar'
+            }
+        }
+    }
+    post{
+        success{
+            echo 'Build, test, run and JAR creation successful and artifact is ready!!'
+        }
+        failure{
+            echo 'Build or test failed!!'
+        }
+    }
+}
