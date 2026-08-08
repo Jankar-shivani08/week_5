@@ -1,1 +1,1 @@
-Main class:fact
+Main-Class:fact
